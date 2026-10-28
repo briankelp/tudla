@@ -1,0 +1,31 @@
+{
+  "name": "@lead/server",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --import tsx --watch src/index.ts",
+    "dev:live": "node --env-file-if-exists=../../.env --import tsx --watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "start": "node dist/index.js",
+    "start:live": "node --env-file-if-exists=../../.env dist/index.js",
+    "worker": "node --env-file-if-exists=../../.env dist/worker.js"
+  },
+  "dependencies": {
+    "@ai-sdk/google": "4.0.99",
+    "@ai-sdk/groq": "4.0.63",
+    "@ai-sdk/openai-compatible": "3.0.71",
+    "@lead/contracts": "2.0.0",
+    "@lead/database": "2.0.0",
+    "ai": "7.0.143",
+    "csv-parse": "^7.0.3",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "jose": "^6.0.0",
+    "pg-boss": "^12.38.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0"
+  }
+}

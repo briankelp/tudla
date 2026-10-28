@@ -1,0 +1,41 @@
+name: Verify application
+on: [push, pull_request]
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: lead
+          POSTGRES_PASSWORD: lead_local_only
+          POSTGRES_DB: lead
+        ports: ["54329:5432"]
+        options: --health-cmd "pg_isready -U lead -d lead" --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      DATABASE_ADMIN_URL: postgresql://lead:lead_local_only@127.0.0.1:54329/lead
+      DATABASE_URL: postgresql://lead_runtime:runtime_local_only@127.0.0.1:54329/lead
+      QUEUE_DATABASE_URL: postgresql://lead_queue:queue_local_only@127.0.0.1:54329/lead
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm audit --audit-level=high
+      - run: npm run build
+      - run: npm run db:setup
+      - run: npm test
+      - run: npm run test:integration
+      - run: npm run eval
+      - run: npm run eval:campaigns
+      - run: docker build -t tudla:test .

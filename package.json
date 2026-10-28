@@ -1,0 +1,48 @@
+{
+  "name": "tudla",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "license": "ISC",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "npm run build:packages && concurrently -k -n api,web \"npm run dev -w @lead/server\" \"npm run dev -w @lead/web\"",
+    "dev:demo": "npm run build -w @lead/contracts && npm run dev -w @lead/web",
+    "build:packages": "npm run build -w @lead/contracts && npm run build -w @lead/database",
+    "build": "npm run build:packages && npm run build -w @lead/server && npm run build -w @lead/web",
+    "build:demo": "node tools/build-demo.mjs",
+    "typecheck": "npm run build:packages && npm run typecheck --workspaces --if-present",
+    "start": "npm run start -w @lead/server",
+    "sample": "node tools/serve.mjs sample",
+    "worker": "npm run worker -w @lead/server",
+    "db:setup": "node --env-file-if-exists=.env tools/setup-db.mjs",
+    "db:migrate": "npm run build:packages && npm run migrate -w @lead/database",
+    "test": "vitest run",
+    "test:integration": "node --env-file-if-exists=.env node_modules/vitest/vitest.mjs run --config vitest.integration.config.ts",
+    "eval": "node --import tsx tools/evaluate.ts",
+    "eval:campaigns": "node --import tsx tools/evaluate-campaigns.ts",
+    "keys:rotate": "node --env-file-if-exists=.env tools/rotate-keys.mjs",
+    "maintenance": "node --env-file-if-exists=.env tools/maintenance.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/supertest": "^6.0.0",
+    "concurrently": "^9.2.0",
+    "prettier": "^3.9.10",
+    "supertest": "^7.1.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^5.0.5"
+  },
+  "overrides": {
+    "@esbuild-kit/core-utils": {
+      "esbuild": "^0.25.4"
+    }
+  }
+}

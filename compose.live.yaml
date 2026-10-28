@@ -1,0 +1,77 @@
+name: tudla
+x-live-build: &live-build
+  context: .
+  target: live
+  args:
+    VITE_LIVE_WORKSPACES: "true"
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: lead
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lead_local_only}
+      POSTGRES_DB: lead
+    ports: ["127.0.0.1:54329:5432"]
+    volumes: ["lead-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lead -d lead"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+  migrate:
+    build: *live-build
+    command:
+      [
+        "sh",
+        "-c",
+        "node tools/setup-db.mjs && node packages/database/dist/migrate.js",
+      ]
+    environment: &server-env
+      DATABASE_ADMIN_URL: postgresql://lead:${POSTGRES_PASSWORD:-lead_local_only}@db:5432/lead
+      DATABASE_URL: postgresql://lead_runtime:${APP_DB_PASSWORD:-runtime_local_only}@db:5432/lead
+      QUEUE_DATABASE_URL: postgresql://lead_queue:${QUEUE_DB_PASSWORD:-queue_local_only}@db:5432/lead
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-}
+      ENCRYPTION_KEYS: ${ENCRYPTION_KEYS:-}
+      ENCRYPTION_KEY_VERSION: ${ENCRYPTION_KEY_VERSION:-1}
+      SUPABASE_URL: ${SUPABASE_URL:-}
+      SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY:-}
+      APP_ORIGIN: http://localhost:3100
+      PORT: 3100
+      DEMO_ONLY: ${DEMO_ONLY:-true}
+      GROQ_MODEL: ${GROQ_MODEL:-openai/gpt-oss-20b}
+      LLM_COMPATIBLE_BASE_URL: ${LLM_COMPATIBLE_BASE_URL:-}
+      LLM_ALLOW_LOCAL: ${LLM_ALLOW_LOCAL:-false}
+      WORKSPACE_DAILY_CALL_LIMIT: ${WORKSPACE_DAILY_CALL_LIMIT:-100}
+      MAX_ACTIVE_JOBS: ${MAX_ACTIVE_JOBS:-3}
+      DATABASE_POOL_SIZE: ${DATABASE_POOL_SIZE:-4}
+    depends_on:
+      db: { condition: service_healthy }
+  app:
+    build: *live-build
+    ports: ["127.0.0.1:3100:3100"]
+    environment:
+      <<: *server-env
+      DATABASE_ADMIN_URL: ""
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3100/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  worker:
+    build: *live-build
+    command: ["node", "apps/server/dist/worker.js"]
+    environment:
+      <<: *server-env
+      DATABASE_ADMIN_URL: ""
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+volumes:
+  lead-data:

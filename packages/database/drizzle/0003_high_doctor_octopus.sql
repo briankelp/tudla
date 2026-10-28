@@ -1,0 +1,1 @@
+ALTER TABLE "lead"."analyses" ADD COLUMN "input_facts" jsonb DEFAULT '[]'::jsonb NOT NULL;

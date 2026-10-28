@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="How the Tudla public demo handles browser-local records, hosting, and external links."
+    />
+    <title>Privacy — Tudla</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <style>
+      @font-face {
+        font-family: "Tudla Sans";
+        src: url("/font.woff2") format("woff2");
+        font-weight: 400;
+        font-display: swap;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        color: #24352e;
+        background: #f8f9f4;
+        font:
+          16px/1.65 "Tudla Sans",
+          system-ui,
+          sans-serif;
+      }
+      main {
+        width: min(760px, calc(100% - 48px));
+        margin: 48px auto 80px;
+      }
+      a {
+        color: #285440;
+        text-underline-offset: 4px;
+      }
+      a:hover {
+        text-decoration-thickness: 2px;
+      }
+      a:focus-visible {
+        outline: 2px solid #285440;
+        outline-offset: 4px;
+      }
+      ::selection {
+        background: #285440;
+        color: white;
+      }
+      h1 {
+        margin: 36px 0 8px;
+        font-size: 40px;
+        line-height: 1.15;
+        letter-spacing: -0.04em;
+      }
+      h2 {
+        margin: 32px 0 10px;
+        font-size: 24px;
+        line-height: 1.3;
+        letter-spacing: -0.02em;
+      }
+      p {
+        margin: 0 0 16px;
+      }
+      .updated {
+        color: #626e66;
+        font-size: 14px;
+        margin-bottom: 28px;
+      }
+      @media (max-width: 600px) {
+        main {
+          margin-top: 24px;
+        }
+        h1 {
+          font-size: 34px;
+        }
+        h2 {
+          font-size: 23px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a href="/">Back to Tudla</a>
+      <h1>Privacy</h1>
+      <p class="updated">Updated 28 October 2026</p>
+      <p>
+        This notice describes the public demo at tudla-demo.vercel.app. It uses
+        sample businesses and does not require an account.
+      </p>
+
+      <h2>Records stay in your browser</h2>
+      <p>
+        Campaigns, imported CSV records, prospect notes, email drafts, and
+        unfinished campaign drafts are stored in this browser's local storage.
+        The demo does not send those records to an application server, database,
+        or AI provider. It includes no application analytics or tracking
+        cookies.
+      </p>
+      <p>
+        Local storage is not encrypted by Tudla and can be accessed by the
+        browser profile. Use sample records rather than credentials, private
+        contacts, or sensitive information.
+      </p>
+
+      <h2>Clear your data</h2>
+      <p>
+        Clear this site's data in your browser settings to remove its saved
+        records and drafts. Clearing browser storage cannot remove CSVs you
+        exported, copied text, or messages opened in another application. Those
+        follow your device and service settings.
+      </p>
+
+      <h2>Hosting and external services</h2>
+      <p>
+        Vercel hosts the demo and may process technical request information,
+        including IP addresses, for delivery and security. Its handling and
+        retention are described in
+        <a href="https://vercel.com/legal/privacy-notice" rel="noreferrer"
+          >Vercel's privacy notice</a
+        >.
+      </p>
+      <p>
+        GitHub, business websites, and your email application have their own
+        privacy practices. Opening an email draft hands its contents to your
+        email application; you decide whether to send it. If you contact the
+        maintainer, your email and anything you include are processed to respond
+        to your message.
+      </p>
+
+      <h2>Self-hosted installations</h2>
+      <p>
+        An authenticated installation can store records on its operator's server
+        and send data to enabled providers. This demo notice does not describe
+        those deployments. Ask that installation's operator about its privacy,
+        access, and deletion procedures.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        For privacy questions, email
+        <a href="mailto:brianfallaria@gmail.com?subject=Tudla%20privacy"
+          >brianfallaria@gmail.com</a
+        >.
+      </p>
+    </main>
+  </body>
+</html>

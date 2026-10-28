@@ -1,0 +1,22 @@
+{
+  "name": "@lead/database",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "migrate": "node --env-file-if-exists=../../.env dist/migrate.js"
+  },
+  "dependencies": {
+    "@lead/contracts": "2.0.0",
+    "drizzle-orm": "^0.45.4",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.15.0",
+    "drizzle-kit": "^0.31.11"
+  }
+}

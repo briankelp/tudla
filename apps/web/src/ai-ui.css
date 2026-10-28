@@ -1,0 +1,127 @@
+.campaign-composer {
+  display: grid;
+  gap: 24px;
+}
+.ai-composer,
+.campaign-editor {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.ai-composer-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.ai-composer-heading .text-button {
+  white-space: nowrap;
+}
+.ai-composer-heading h2,
+.campaign-editor h2 {
+  font-size: 18px;
+  line-height: 1.35;
+}
+.ai-composer-heading p {
+  margin-top: 4px;
+  color: var(--muted);
+}
+.ai-composer-notice {
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--soft);
+}
+.ai-composer-notice .text-button {
+  margin-left: 8px;
+}
+.ai-draft-preview {
+  display: grid;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.ai-draft-preview h3 {
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+.ai-draft-preview ul {
+  margin: 0;
+  padding-left: 20px;
+}
+.ai-field-preview dl {
+  display: grid;
+  grid-template-columns: minmax(130px, 0.35fr) minmax(0, 1fr);
+  gap: 6px 12px;
+  margin: 0;
+}
+.ai-field-preview dt {
+  color: var(--muted);
+}
+.ai-field-preview dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.ai-settings-form {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding-bottom: 24px;
+}
+.ai-settings-form > label {
+  min-width: 0;
+  margin: 0;
+}
+.ai-settings-form > .field-help {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.ai-settings-advanced {
+  padding-top: 2px;
+}
+.ai-settings-advanced summary {
+  margin-bottom: 10px;
+  cursor: pointer;
+  color: var(--muted);
+}
+.ai-settings-advanced > label {
+  margin: 0;
+}
+.ai-settings-advanced .field-help {
+  margin: 8px 0 0;
+}
+.ai-settings-form .dialog-actions {
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 0;
+}
+.ai-settings-form .dialog-actions .field-help {
+  margin: 0;
+}
+@media (max-width: 600px) {
+  .ai-composer,
+  .campaign-editor {
+    padding: 14px;
+  }
+  .ai-field-preview dl {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .ai-field-preview dd + dt {
+    margin-top: 8px;
+  }
+}
+@media (min-width: 880px) {
+  dialog:has(.campaign-composer) {
+    width: min(1040px, calc(100% - 48px));
+  }
+  .campaign-composer {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 20px;
+  }
+}

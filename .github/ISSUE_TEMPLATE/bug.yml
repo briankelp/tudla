@@ -1,0 +1,29 @@
+name: Bug report
+description: Report a reproducible problem using sample data.
+body:
+  - type: textarea
+    id: behavior
+    attributes:
+      label: What happened?
+      description: Include the expected behavior and steps to reproduce. Use synthetic examples.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser/OS, and commit or version. For self-hosting, include Node and PostgreSQL versions.
+    validations:
+      required: true
+  - type: textarea
+    id: checks
+    attributes:
+      label: Screenshots or relevant errors
+      description: Redact personal data, access tokens, connection URLs, and provider keys.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: I removed credentials and private records from this report.
+          required: true
