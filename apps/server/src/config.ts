@@ -13,6 +13,8 @@ export type Config = {
   dailyLimit: number;
   maxActiveJobs: number;
   poolSize: number;
+  requestsPerMinute: number;
+  trustedProxyCidrs: string[];
   embeddedWorker: boolean;
   demoOnly: boolean;
   production: boolean;
@@ -72,6 +74,11 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): Config {
     dailyLimit: positive("WORKSPACE_DAILY_CALL_LIMIT", 100),
     maxActiveJobs: positive("MAX_ACTIVE_JOBS", 3),
     poolSize: positive("DATABASE_POOL_SIZE", 4),
+    requestsPerMinute: positive("REQUESTS_PER_MINUTE", 600),
+    trustedProxyCidrs: (env.TRUSTED_PROXY_CIDRS || "")
+      .split(",")
+      .map((value) => value.trim())
+      .filter(Boolean),
     embeddedWorker: !demoOnly && env.EMBEDDED_WORKER === "true",
     demoOnly,
     production: env.NODE_ENV === "production",

@@ -49,6 +49,14 @@ Remove the administrator connection from API and worker services. Their runtime 
 
 Provider keys are supplied by workspace owners/admins in Connections and encrypted server-side. There is no operator-key fallback. Connection tests and jobs can consume requests, credits, or tokens; provider billing is authoritative. Start with small limits, test one reviewed record, and monitor usage before increasing them.
 
+### Request limits and reverse proxies
+
+The self-hosted Express server allows 600 requests per minute per IPv4 address or IPv6 /56 subnet, including API, configuration, and static routes. Set `REQUESTS_PER_MINUTE` to a positive integer to change that allowance. Excess requests receive HTTP 429 with rate-limit and `Retry-After` headers before body parsing or database work.
+
+Proxy headers are untrusted by default. Behind a reverse proxy, set `TRUSTED_PROXY_CIDRS` to a comma-separated list of only that proxy's exact IP addresses or CIDRs. The proxy must overwrite incoming forwarded headers, and network rules must prevent bypassing it. Follow [Express's proxy guidance](https://expressjs.com/en/guide/behind-proxies/); do not trust arbitrary client-supplied headers or every internet address.
+
+Counters use process memory and reset on restart. Multiple API processes have separate counters. Use an edge gateway or a shared rate-limit store for a deployment-wide quota, and configure hosting-level abuse controls separately. Provider-call limits remain independent of HTTP request limits.
+
 ### Identity, privacy, and operations
 
 Configure a Google web OAuth client and Supabase callback using [Supabase's setup guide](https://supabase.com/docs/guides/auth/social-login/auth-google). Request identity, email, and profile only. Google secrets stay in Supabase. Test two independent accounts and intentional invitations, including attempted cross-workspace access, before inviting users.

@@ -44,6 +44,8 @@ services:
       WORKSPACE_DAILY_CALL_LIMIT: ${WORKSPACE_DAILY_CALL_LIMIT:-100}
       MAX_ACTIVE_JOBS: ${MAX_ACTIVE_JOBS:-3}
       DATABASE_POOL_SIZE: ${DATABASE_POOL_SIZE:-4}
+      REQUESTS_PER_MINUTE: ${REQUESTS_PER_MINUTE:-600}
+      TRUSTED_PROXY_CIDRS: ${TRUSTED_PROXY_CIDRS:-}
     depends_on:
       db: { condition: service_healthy }
   app:

@@ -1,5 +1,6 @@
 import express from "express";
 import helmet from "helmet";
+import { rateLimit } from "express-rate-limit";
 import { randomBytes } from "node:crypto";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
@@ -75,6 +76,8 @@ export function createApp(
 ) {
   const app = express();
   app.disable("x-powered-by");
+  if (config.trustedProxyCidrs.length)
+    app.set("trust proxy", config.trustedProxyCidrs);
   app.use(
     helmet({
       contentSecurityPolicy: {
@@ -92,6 +95,15 @@ export function createApp(
           upgradeInsecureRequests: config.production ? [] : null,
         },
       },
+    }),
+  );
+  app.use(
+    rateLimit({
+      windowMs: 60_000,
+      limit: config.requestsPerMinute,
+      standardHeaders: "draft-8",
+      legacyHeaders: false,
+      message: { message: "Too many requests. Try again shortly." },
     }),
   );
   app.use(express.json({ limit: "1mb" }));
